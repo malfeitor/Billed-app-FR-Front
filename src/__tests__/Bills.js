@@ -8,11 +8,12 @@ import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
 import { ROUTES_PATH} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
-import {mockedBills} from '../__mocks__/store.js'
+import mockedBills from '../__mocks__/store.js'
 import userEvent from '@testing-library/user-event'
 
 import router from "../app/Router.js";
 import Bills from '../containers/Bills.js';
+import { formatDate, formatStatus } from "../app/format.js"
 import $ from 'jquery'
 
 describe("Given I am connected as an employee", () => {
@@ -61,6 +62,25 @@ describe("Given I am connected as an employee", () => {
 
       expect(mockHandleClickIconEye).toHaveBeenCalledTimes(iconEyes.length)
       expect(modalFile).toHaveClass('show')
+    })
+
+    test('Then bills should match with fixture', async () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      const billsFixture = bills.map(doc => {
+        return {
+          ...doc,
+          date: formatDate(doc.date),
+          status: formatStatus(doc.status)
+        }
+      })
+      const billsPage = new Bills({document, onNavigate, mockedBills, localStorageMock})
+      billsPage.store = mockedBills
+      const billsList = await billsPage.getBills()
+      billsFixture.forEach(fixture => {
+        expect(billsList).toContainEqual(fixture)
+      })
     })
   })
 })
