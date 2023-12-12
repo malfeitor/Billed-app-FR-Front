@@ -19,8 +19,9 @@ export default class NewBill {
     e.preventDefault()
     const pictureRegExp = new RegExp(/((jpe?)|(pn))g$/,'i')
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    const filePath = e.target.value.split(/\\/g)
-    const fileName = filePath[filePath.length-1]
+    // const filePath = e.target.value.split(/\\/g)
+    // const fileName = filePath[filePath.length-1]
+    const fileName = file.name
     if(!pictureRegExp.test(fileName)) {
       alert('Fichier invalide !')
       this.document.querySelector(`input[data-testid="file"]`).value = null
