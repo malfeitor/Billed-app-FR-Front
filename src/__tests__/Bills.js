@@ -6,7 +6,7 @@ import '@testing-library/jest-dom'
 import {screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
-import { ROUTES_PATH} from "../constants/routes.js";
+import { ROUTES, ROUTES_PATH} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import mockedBills from '../__mocks__/store.js'
 import userEvent from '@testing-library/user-event'
@@ -62,6 +62,25 @@ describe("Given I am connected as an employee", () => {
 
       expect(mockHandleClickIconEye).toHaveBeenCalledTimes(iconEyes.length)
       expect(modalFile).toHaveClass('show')
+    })
+
+    test('Then New Bill button should redirect to NewBill', () => {
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      const rootDiv = document.createElement("div")
+      rootDiv.setAttribute("id", "root")
+      document.body.append(rootDiv)
+      rootDiv.innerHTML = BillsUI(bills)
+      const mockOnNavigate = jest.fn()
+      const billsPage = new Bills({ document, mockOnNavigate, mockedBills, localStorageMock })
+      billsPage.onNavigate = mockOnNavigate
+
+      const btnNewBill = document.querySelector(`button[data-testid="btn-new-bill"]`)
+      userEvent.click(btnNewBill)
+
+      expect(mockOnNavigate).toHaveBeenCalledWith('#employee/bill/new')
     })
 
     test('Then bills should match with fixture', async () => {
