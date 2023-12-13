@@ -11,6 +11,8 @@ import {localStorageMock} from "../__mocks__/localStorage.js";
 import mockedBills from '../__mocks__/store.js'
 import userEvent from '@testing-library/user-event'
 
+import Store from '../app/Store.js'
+
 import router from "../app/Router.js";
 import Bills from '../containers/Bills.js';
 import { formatDate, formatStatus } from "../app/format.js"
@@ -137,6 +139,26 @@ describe("Given I am a user connected as Employee", () => {
       document.body.innerHTML = ''
       document.body.append(root)
       router()
+    })
+    test("Then it fetches an 404 error", async () => {
+      mockedBills.bills.mockImplementationOnce(() => {
+        return {
+          list : () =>  {
+            return Promise.reject(new Error("Erreur 404"))
+          }
+      }})
+      const rootDiv = document.querySelector('#root')
+      const billsPage = new Bills({ document, onNavigate: window.onNavigate, store: mockedBills, localStorage: localStorageMock })
+      billsPage.getBills().then(data => {
+        // on fetch l'erreur 404
+        rootDiv.innerHTML = BillsUI({ data })
+      }).catch(error => {
+        rootDiv.innerHTML = ROUTES({ pathname: ROUTES_PATH['Bills'], error })
+      })
+      // on attends un tick pour finir le chargement
+      await new Promise(process.nextTick);
+      const message = await screen.getByText(/Erreur 404/)
+      expect(message.textContent).toBeTruthy()
     })
   })
 })
