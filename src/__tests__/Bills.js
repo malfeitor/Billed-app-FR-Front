@@ -127,4 +127,18 @@ describe("Given I am a user connected as Employee", () => {
       expect(document).toMatchSnapshot()
     })
   })
+  describe("When an error occurs on API", () => {
+    beforeEach(() => {
+      jest.spyOn(mockedBills, "bills")
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.innerHTML = ''
+      document.body.append(root)
+      router()
+    })
+  })
 })
