@@ -70,16 +70,11 @@ describe("Given I am connected as an employee", () => {
 
       expect(mockHandleSubmit).toHaveBeenCalled()
     })
-
     test("Then we can submit a bill", async () => {
-      const onNavigate = (pathname) => {
-        document.body.innerHTML = ROUTES({ pathname })
-      }
-      const newBill = new NewBill({document, onNavigate, mockedBills, localStorageMock})
-      newBill.store = mockedBills
+      const mockOnNavigate = jest.fn()
+      const newBill = new NewBill({document, onNavigate: mockOnNavigate, store: mockedBills, localStorageMock})
       const inputFile = screen.getByTestId('file')
       const testFile = new File(["test"], "test.jpg", {type: 'image/jpg'})
-      const mockOnNavigate = jest.fn()
       newBill.onNavigate = mockOnNavigate
       const mockUpdateBill = jest.fn(newBill.updateBill)
       newBill.updateBill = mockUpdateBill
@@ -115,6 +110,21 @@ describe("Given I am connected as an employee", () => {
         "type": "Services en ligne", 
         "vat": "25"
       })
+    })
+    test("Then it should raise an 404 error", async () => {
+      expect.assertions(1);
+      jest.spyOn(mockedBills, "bills")
+      mockedBills.bills.mockImplementationOnce(() => {
+        return {
+          create : () =>  {
+            return Promise.reject(new Error("Erreur 404"))
+          }
+      }})
+
+      const mockOnNavigate = jest.fn()
+      const newBill = new NewBill({document, onNavigate: mockOnNavigate, store: mockedBills, localStorageMock})
+
+      expect(newBill.store.bills().create()).rejects.toEqual(new Error('Erreur 404'))
     })
   })
 })
