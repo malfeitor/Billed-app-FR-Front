@@ -103,3 +103,28 @@ describe("Given I am connected as an employee", () => {
     })
   })
 })
+
+// test d'intégration GET
+describe("Given I am a user connected as Employee", () => {
+  describe("When I navigate to the Bills page", () => {
+    test('Then we fetch bills from mock API', async () => {
+      document.body.innerHTML = ''
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.append(root)
+      router()
+      window.onNavigate(ROUTES_PATH.Bills)
+    
+      const mockOnNavigate = jest.fn()
+      const billsPage = new Bills({ document, mockOnNavigate, mockedBills, localStorageMock })
+      billsPage.store = mockedBills
+    
+      root.innerHTML = BillsUI({data: await billsPage.getBills()})
+      expect(document).toMatchSnapshot()
+    })
+  })
+})
