@@ -160,5 +160,25 @@ describe("Given I am a user connected as Employee", () => {
       const message = await screen.getByText(/Erreur 404/)
       expect(message.textContent).toBeTruthy()
     })
+    test("Then it fetches an 500 error", async () => {
+      mockedBills.bills.mockImplementationOnce(() => {
+        return {
+          list : () =>  {
+            return Promise.reject(new Error("Erreur 500"))
+          }
+      }})
+      const rootDiv = document.querySelector('#root')
+      const billsPage = new Bills({ document, onNavigate: window.onNavigate, store: mockedBills, localStorage: localStorageMock })
+      billsPage.getBills().then(data => {
+        // on fetch l'erreur 500
+        rootDiv.innerHTML = BillsUI({ data })
+      }).catch(error => {
+        rootDiv.innerHTML = ROUTES({ pathname: ROUTES_PATH['Bills'], error })
+      })
+      // on attends un tick pour finir le chargement
+      await new Promise(process.nextTick);
+      const message = await screen.getByText(/Erreur 500/)
+      expect(message.textContent).toBeTruthy()
+    })
   })
 })
