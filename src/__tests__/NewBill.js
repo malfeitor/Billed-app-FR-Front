@@ -5,6 +5,7 @@
 import { fireEvent, screen } from "@testing-library/dom"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
+import { ROUTES } from '../constants/routes.js'
 import { localStorageMock } from "../__mocks__/localStorage.js"
 import mockedBills from "../__mocks__/store.js"
 import userEvent from "@testing-library/user-event"
@@ -53,6 +54,21 @@ describe("Given I am connected as an employee", () => {
       userEvent.upload(inputFile, testFile)
 
       expect(mockCreate).toHaveBeenCalledTimes(1)
+    })
+
+    test("Then we should call handleSubmit", () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      const newBill = new NewBill({document, onNavigate, mockedBills, localStorageMock})
+      const mockHandleSubmit = jest.fn()
+      const formNewBill = document.querySelector(`form[data-testid="form-new-bill"]`)
+      formNewBill.addEventListener("submit", mockHandleSubmit)
+      const btnSubmit = document.querySelector('#btn-send-bill')
+
+      userEvent.click(btnSubmit)
+
+      expect(mockHandleSubmit).toHaveBeenCalled()
     })
 
     test("Then we can submit a bill", async () => {
