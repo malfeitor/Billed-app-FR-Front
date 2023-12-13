@@ -47,7 +47,7 @@ describe("Given I am connected as an employee", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
-      const billsPage = new Bills({document, onNavigate, mockedBills, localStorageMock})
+      const billsPage = new Bills({document, onNavigate, store: mockedBills, localStorage: localStorageMock})
       const mockHandleClickIconEye = jest.fn(billsPage.handleClickIconEye)
       const modalFile = document.querySelector('#modaleFile')
       $.fn.modal = jest.fn(modalFile.classList.add('show'))
@@ -74,8 +74,7 @@ describe("Given I am connected as an employee", () => {
       document.body.append(rootDiv)
       rootDiv.innerHTML = BillsUI(bills)
       const mockOnNavigate = jest.fn()
-      const billsPage = new Bills({ document, mockOnNavigate, mockedBills, localStorageMock })
-      billsPage.onNavigate = mockOnNavigate
+      const billsPage = new Bills({ document, onNavigate: mockOnNavigate, mockedBills, localStorageMock })
 
       const btnNewBill = document.querySelector(`button[data-testid="btn-new-bill"]`)
       userEvent.click(btnNewBill)
@@ -94,8 +93,7 @@ describe("Given I am connected as an employee", () => {
           status: formatStatus(doc.status)
         }
       })
-      const billsPage = new Bills({document, onNavigate, mockedBills, localStorageMock})
-      billsPage.store = mockedBills
+      const billsPage = new Bills({document, onNavigate, store: mockedBills, localStorage: localStorageMock})
       const billsList = await billsPage.getBills()
       billsFixture.forEach(fixture => {
         expect(billsList).toContainEqual(fixture)
@@ -120,8 +118,7 @@ describe("Given I am a user connected as Employee", () => {
       window.onNavigate(ROUTES_PATH.Bills)
     
       const mockOnNavigate = jest.fn()
-      const billsPage = new Bills({ document, mockOnNavigate, mockedBills, localStorageMock })
-      billsPage.store = mockedBills
+      const billsPage = new Bills({ document, onNavigate: mockOnNavigate, store: mockedBills, localStorage: localStorageMock })
     
       root.innerHTML = BillsUI({data: await billsPage.getBills()})
       expect(document).toMatchSnapshot()
@@ -132,7 +129,8 @@ describe("Given I am a user connected as Employee", () => {
       jest.spyOn(mockedBills, "bills")
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee'
+        type: 'Employee',
+        email: 'a@a'
       }))
       const root = document.createElement("div")
       root.setAttribute("id", "root")
