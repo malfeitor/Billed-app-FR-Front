@@ -126,5 +126,20 @@ describe("Given I am connected as an employee", () => {
 
       expect(newBill.store.bills().create()).rejects.toEqual(new Error('Erreur 404'))
     })
+    test("Then it should raise an 500 error", async () => {
+      expect.assertions(1);
+      jest.spyOn(mockedBills, "bills")
+      mockedBills.bills.mockImplementationOnce(() => {
+        return {
+          create : () =>  {
+            return Promise.reject(new Error("Erreur 500"))
+          }
+      }})
+
+      const mockOnNavigate = jest.fn()
+      const newBill = new NewBill({document, onNavigate: mockOnNavigate, store: mockedBills, localStorageMock})
+
+      expect(newBill.store.bills().create()).rejects.toEqual(new Error('Erreur 500'))
+    })
   })
 })
