@@ -11,8 +11,6 @@ import {localStorageMock} from "../__mocks__/localStorage.js";
 import mockedBills from '../__mocks__/store.js'
 import userEvent from '@testing-library/user-event'
 
-import Store from '../app/Store.js'
-
 import router from "../app/Router.js";
 import Bills from '../containers/Bills.js';
 import { formatDate, formatStatus } from "../app/format.js"
@@ -50,19 +48,16 @@ describe("Given I am connected as an employee", () => {
         document.body.innerHTML = ROUTES({ pathname })
       }
       const billsPage = new Bills({document, onNavigate, store: mockedBills, localStorage: localStorageMock})
-      const mockHandleClickIconEye = jest.fn(billsPage.handleClickIconEye)
+      jest.spyOn(billsPage, 'handleClickIconEye')
       const modalFile = document.querySelector('#modaleFile')
       $.fn.modal = jest.fn(modalFile.classList.add('show'))
 
       const iconEyes = screen.getAllByTestId('icon-eye')
       iconEyes.forEach(icon => {
-        icon.addEventListener('click', () => mockHandleClickIconEye(icon))
-      }) 
-      iconEyes.forEach(icon => {
         userEvent.click(icon)
       })
 
-      expect(mockHandleClickIconEye).toHaveBeenCalledTimes(iconEyes.length)
+      expect(billsPage.handleClickIconEye).toHaveBeenCalledTimes(iconEyes.length)
       expect(modalFile).toHaveClass('show')
     })
 
