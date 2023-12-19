@@ -48,15 +48,14 @@ describe("Given I am connected as an employee", () => {
       newBill.store = mockedBills
       const inputFile = screen.getByTestId('file')
       const testFile = new File(["test"], "test.jpg", {type: 'image/jpg'})
-      const mockCreate = jest.fn(mockedBills.bills().create)
-      mockedBills.bills().create = mockCreate
+      jest.spyOn(mockedBills.bills(), 'create')
 
       userEvent.upload(inputFile, testFile)
 
-      expect(mockCreate).toHaveBeenCalledTimes(1)
+      expect(mockedBills.bills().create).toHaveBeenCalledTimes(1)
     })
 
-    test("Then we should call handleSubmit", () => {
+    test("Then we should handle the submit button", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
@@ -75,9 +74,7 @@ describe("Given I am connected as an employee", () => {
       const newBill = new NewBill({document, onNavigate: mockOnNavigate, store: mockedBills, localStorageMock})
       const inputFile = screen.getByTestId('file')
       const testFile = new File(["test"], "test.jpg", {type: 'image/jpg'})
-      newBill.onNavigate = mockOnNavigate
-      const mockUpdateBill = jest.fn(newBill.updateBill)
-      newBill.updateBill = mockUpdateBill
+      jest.spyOn(newBill, 'updateBill')
 
       // we need to parse getItem once more because it JSON.stringify the result
       const mockLocalStorageGetItem = jest.fn(localStorageMock.getItem)
@@ -97,7 +94,7 @@ describe("Given I am connected as an employee", () => {
       // call onNavigate 2 times because once in NewBill.handleSubmit 
       // and once in updateBill who is called in handleSubmit
       expect(mockOnNavigate).toHaveBeenCalledTimes(2)
-      expect(mockUpdateBill).toHaveBeenCalledWith({
+      expect(newBill.updateBill).toHaveBeenCalledWith({
         "amount": 250, 
         "commentary": "a test commentary for the bill", 
         "date": "2023-12-12",
