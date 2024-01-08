@@ -313,27 +313,27 @@ Document {
                         
       
                         <td>
-                          Restaurants et bars
+                          Hôtel et logement
                         </td>
                         
       
                         <td>
-                          test2
+                          encore
                         </td>
                         
       
                         <td>
-                          2 Fév. 02
+                          4 Avr. 04
                         </td>
                         
       
                         <td>
-                          200 €
+                          400 €
                         </td>
                         
       
                         <td>
-                          Refused
+                          En attente
                         </td>
                         
       
@@ -346,7 +346,7 @@ Document {
                             
       
                             <div
-                              data-bill-url="https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=4df6ed2c-12c8-42a2-b013-346c1346f732"
+                              data-bill-url="https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a"
                               data-testid="icon-eye"
                               id="eye"
                             >
@@ -493,22 +493,22 @@ Document {
                         
       
                         <td>
-                          Transports
+                          Restaurants et bars
                         </td>
                         
       
                         <td>
-                          test1
+                          test2
                         </td>
                         
       
                         <td>
-                          1 Jan. 01
+                          2 Fév. 02
                         </td>
                         
       
                         <td>
-                          100 €
+                          200 €
                         </td>
                         
       
@@ -526,7 +526,7 @@ Document {
                             
       
                             <div
-                              data-bill-url="https://test.storage.tld/v0/b/billable-677b6.a…61.jpeg?alt=media&token=7685cd61-c112-42bc-9929-8a799bb82d8b"
+                              data-bill-url="https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=4df6ed2c-12c8-42a2-b013-346c1346f732"
                               data-testid="icon-eye"
                               id="eye"
                             >
@@ -583,27 +583,27 @@ Document {
                         
       
                         <td>
-                          Hôtel et logement
+                          Transports
                         </td>
                         
       
                         <td>
-                          encore
+                          test1
                         </td>
                         
       
                         <td>
-                          4 Avr. 04
+                          1 Jan. 01
                         </td>
                         
       
                         <td>
-                          400 €
+                          100 €
                         </td>
                         
       
                         <td>
-                          En attente
+                          Refused
                         </td>
                         
       
@@ -616,7 +616,7 @@ Document {
                             
       
                             <div
-                              data-bill-url="https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a"
+                              data-bill-url="https://test.storage.tld/v0/b/billable-677b6.a…61.jpeg?alt=media&token=7685cd61-c112-42bc-9929-8a799bb82d8b"
                               data-testid="icon-eye"
                               id="eye"
                             >

@@ -35,9 +35,10 @@ describe("Given I am connected as an employee", () => {
       expect(windowIcon).toHaveClass('active-icon')
     })
 
-    test("Then bills should be ordered from earliest to latest", () => {
-      document.body.innerHTML = BillsUI({ data: bills })
-      const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
+    test("Then bills should be ordered from earliest to latest", async () => {
+      const mockOnNavigate = jest.fn()
+      const billsPage = new Bills({ document, onNavigate: mockOnNavigate, store: mockedBills, localStorage: localStorageMock })
+      var dates = await billsPage.getBills().then((bills) => bills.map(bill => bill.date))
       const antiChrono = (a, b) => ((a < b) ? 1 : -1)
       const datesSorted = [...dates].sort(antiChrono)
       expect(dates).toEqual(datesSorted)
@@ -47,6 +48,7 @@ describe("Given I am connected as an employee", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
+      document.body.innerHTML = BillsUI({ data: bills })
       const billsPage = new Bills({document, onNavigate, store: mockedBills, localStorage: localStorageMock})
       jest.spyOn(billsPage, 'handleClickIconEye')
       const modalFile = document.querySelector('#modaleFile')
